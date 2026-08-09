@@ -3,8 +3,16 @@ import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv } from "@/lib/env";
 import type { Database } from "@/lib/db/types";
 
-/** Routes reachable without a session. Everything else redirects to /login. */
-const PUBLIC_PREFIXES = ["/login", "/signup", "/callback", "/auth"];
+/**
+ * Routes reachable without a session. Everything else redirects to /login.
+ *
+ * `/api/cron` is here on purpose: it is called by Supabase pg_cron via
+ * net.http_post, which carries no browser session cookie, only the
+ * Authorization bearer header the route handler checks against CRON_SECRET.
+ * Without this, the redirect below fires before that check ever runs and the
+ * reminder job silently 307s to /login instead of sending mail.
+ */
+const PUBLIC_PREFIXES = ["/login", "/signup", "/callback", "/auth", "/api/cron"];
 
 /**
  * Refreshes the Supabase auth token and rewrites the cookies onto the
