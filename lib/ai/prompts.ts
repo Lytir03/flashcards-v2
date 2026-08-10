@@ -63,3 +63,23 @@ ${text}
 
 Produce the flashcards.`;
 }
+
+export const DISTRACTOR_SYSTEM = `You write multiple-choice distractors for a quiz game between two students.
+
+For each item you are given a question and its correct answer. Write exactly three wrong-but-plausible alternative answers.
+
+RULES
+- Match the correct answer's rough length and notation. If it contains LaTeX (dollar-delimited), write your distractors in LaTeX too.
+- Each distractor must be wrong on substance — a different value, a different condition, a different name — not a reworded or abbreviated version of the correct answer.
+- The three distractors must be distinct from each other and from the correct answer, not near-duplicates.
+- Never write "all of the above", "none of the above", or other hedges — every option must be a genuine, specific candidate answer.
+- Return JSON only, one entry per item, and preserve the given index exactly — do not renumber or reorder.`;
+
+export function distractorUserPrompt(
+  items: { index: number; question: string; answer: string }[],
+): string {
+  const list = items
+    .map((item) => `[${item.index}] Q: ${item.question}\nA: ${item.answer}`)
+    .join("\n\n");
+  return `${list}\n\nWrite three distractors for each item above.`;
+}

@@ -1,13 +1,17 @@
 import "server-only";
 import { serverEnv } from "@/lib/env";
 import {
+  DISTRACTOR_SYSTEM,
   GENERATION_SYSTEM,
   TRANSCRIPTION_SYSTEM,
+  distractorUserPrompt,
   generationUserPrompt,
   transcriptionUserPrompt,
 } from "./prompts";
 import {
   CARD_JSON_SCHEMA,
+  DISTRACTOR_JSON_SCHEMA,
+  distractorSet,
   generatedCardSet,
   type GeneratedCard,
 } from "./schemas";
@@ -20,6 +24,12 @@ export type GenerateResult =
   | { ok: true; cards: GeneratedCard[]; model: string }
   | { ok: false; error: string };
 
+export type DistractorRequestItem = { index: number; question: string; answer: string };
+
+export type DistractorResult =
+  | { ok: true; items: { index: number; distractors: [string, string, string] }[]; model: string }
+  | { ok: false; error: string };
+
 export interface AiProvider {
   readonly name: string;
   readonly model: string;
@@ -29,6 +39,7 @@ export interface AiProvider {
     totalPages: number,
   ): Promise<TranscribeResult>;
   generateCards(text: string, deckName: string): Promise<GenerateResult>;
+  generateDistractors(items: DistractorRequestItem[]): Promise<DistractorResult>;
 }
 
 /**
@@ -217,6 +228,75 @@ function ollamaProvider(): AiProvider {
         error: `The model did not return usable cards. ${lastError}`,
       };
     },
+
+    async generateDistractors(items) {
+      let lastError = "";
+
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const messages = [
+          { role: "system", content: `${DISTRACTOR_SYSTEM}\n\n/no_think` },
+          {
+            role: "user",
+            content:
+              distractorUserPrompt(items) +
+              `\n\nReturn JSON matching this schema:\n${JSON.stringify(DISTRACTOR_JSON_SCHEMA)}` +
+              (lastError
+                ? `\n\nYour previous reply was rejected: ${lastError}. Fix it and return only JSON.`
+                : ""),
+          },
+        ];
+
+        try {
+          const response = await fetch(`${ollamaBaseUrl}/chat/completions`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: ollamaModel,
+              stream: false,
+              temperature: 0.4,
+              response_format: { type: "json_object" },
+              messages,
+            }),
+          });
+
+          if (!response.ok) {
+            const body = await response.text();
+            return {
+              ok: false,
+              error:
+                response.status === 404
+                  ? `Model "${ollamaModel}" is not installed. Run: ollama pull ${ollamaModel}`
+                  : `Ollama returned ${response.status}: ${body.slice(0, 300)}`,
+            };
+          }
+
+          const data = await response.json();
+          const raw = stripThinking(data?.choices?.[0]?.message?.content ?? "");
+          const parsed = distractorSet.safeParse(extractJson(raw));
+
+          if (parsed.success) {
+            return {
+              ok: true,
+              items: parsed.data.items.map((item) => ({
+                index: item.index,
+                distractors: item.distractors as [string, string, string],
+              })),
+              model: ollamaModel,
+            };
+          }
+          lastError = parsed.error.issues
+            .map((i) => `${i.path.join(".")}: ${i.message}`)
+            .join("; ");
+        } catch (error) {
+          lastError = String(error);
+        }
+      }
+
+      return {
+        ok: false,
+        error: `The model did not return usable distractors. ${lastError}`,
+      };
+    },
   };
 }
 
@@ -335,6 +415,65 @@ function anthropicProvider(): AiProvider {
 
       return { ok: true, cards: parsed.data.cards, model: anthropicModel };
     },
+
+    async generateDistractors(items) {
+      if (!anthropicApiKey) {
+        return { ok: false, error: "ANTHROPIC_API_KEY is not set." };
+      }
+
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": anthropicApiKey,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: anthropicModel,
+          max_tokens: 4096,
+          system: DISTRACTOR_SYSTEM,
+          tools: [
+            {
+              name: "save_distractors",
+              description: "Save the generated multiple-choice distractors.",
+              input_schema: DISTRACTOR_JSON_SCHEMA,
+            },
+          ],
+          tool_choice: { type: "tool", name: "save_distractors" },
+          messages: [{ role: "user", content: distractorUserPrompt(items) }],
+        }),
+      });
+
+      if (!response.ok) {
+        const body = await response.text();
+        return {
+          ok: false,
+          error: `Anthropic returned ${response.status}: ${body.slice(0, 300)}`,
+        };
+      }
+
+      const data = await response.json();
+      const toolUse = (data?.content ?? []).find(
+        (block: { type: string }) => block.type === "tool_use",
+      );
+
+      const parsed = distractorSet.safeParse(toolUse?.input);
+      if (!parsed.success) {
+        return {
+          ok: false,
+          error: `Unexpected distractor format: ${parsed.error.issues[0]?.message ?? "unknown"}`,
+        };
+      }
+
+      return {
+        ok: true,
+        items: parsed.data.items.map((item) => ({
+          index: item.index,
+          distractors: item.distractors as [string, string, string],
+        })),
+        model: anthropicModel,
+      };
+    },
   };
 }
 
@@ -372,6 +511,21 @@ function mockProvider(): AiProvider {
             page: 1,
           },
         ],
+      };
+    },
+
+    async generateDistractors(items) {
+      return {
+        ok: true,
+        model: "mock",
+        items: items.map((item) => ({
+          index: item.index,
+          distractors: [
+            `Mock distractor A for item ${item.index}`,
+            `Mock distractor B for item ${item.index}`,
+            `Mock distractor C for item ${item.index}`,
+          ] as [string, string, string],
+        })),
       };
     },
   };

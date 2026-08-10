@@ -46,6 +46,27 @@ them makes `npm run lint` fail to start.
 - **The review queue is populated by a trigger** (`0005`), not application code,
   because four separate paths approve cards and one forgetting to enqueue fails
   silently.
+- **`challenge_questions.correct_index` is not an RLS problem, it's a GRANT
+  problem** (`0008_challenge_security.sql`). A row-level policy can't hide one
+  column — a participant's own session could `select *` and read the whole
+  answer key before playing. Fixed with `revoke select ... from authenticated`
+  + a column-level `grant select (safe, columns, only)`, same layer distinction
+  `0002_grants.sql` documents. Never add `correct_index` back to that grant;
+  the post-match review renders server-side (admin client) instead.
+- **`challenge_answers`'s SELECT policy checks the same table it's on.** That
+  self-reference recurses in Postgres unless the inner lookup goes through a
+  `security definer` function (`has_answered_challenge_question`, owned by a
+  role that owns the table, so it bypasses RLS on the way in). Don't inline
+  the `exists (select ... from challenge_answers ...)` back into the policy
+  — it errors with "infinite recursion detected in policy" the moment two
+  rows for the same question exist.
+- **Practice bots are real `auth.users` rows**, created via
+  `POST /api/admin/seed-bots` (admin API, not a SQL migration — GoTrue's
+  required columns aren't stable to hand-write). No password is set; they are
+  not sign-in-able. `profiles.is_bot`/`bot_skill_level` drive both the
+  scoring in `lib/challenge/bot.ts` and their exclusion from
+  `weekly_leaderboard` (redefined in `0010_bots.sql` — bots are for practice,
+  not ranking, which also closes the obvious "farm the weakest bot" abuse).
 
 ## The governing principle
 
@@ -94,7 +115,7 @@ supabase start          # local stack, needs Docker
 supabase migration up   # apply pending migrations
 npm run db:types        # REQUIRED after every migration
 npm run dev
-npm test                # vitest: sm2 + autowrap, 25 tests
+npm test                # vitest: sm2, autowrap, challenge scoring + bots, 42 tests
 npm run typecheck
 npm run lint
 ```
@@ -105,12 +126,18 @@ to discard cards.
 
 ## State
 
-Slices 0–5 done: auth, decks, upload + extraction, vision fallback, generation
-+ approval, SM-2 review, email reminders. Not started: **challenges** (tables
-exist, `/challenges` is a placeholder), web push, deployment.
+Slices 0–6 done: auth, decks, upload + extraction, vision fallback, generation
++ approval, SM-2 review, email reminders, challenges (distractor generation,
+challenge-by-username + practice bots, live quiz over Realtime, server-side
+scoring, weekly leaderboard). Not started: web push, deployment.
 
-`docs/03-roadmap.md` has the plan. The project is **not** under version control
-yet — worth `git init` before the next slice.
+Challenges ships **challenge-by-username only** — no random matchmaking pool
+yet, per `docs/03-roadmap.md`'s own note that random matching needs users this
+app doesn't have. Four fixed practice bots (seeded via
+`POST /api/admin/seed-bots`) exist so a single account can play a full match
+without a second human.
+
+`docs/03-roadmap.md` has the plan.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

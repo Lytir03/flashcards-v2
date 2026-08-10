@@ -42,3 +42,45 @@ export const CARD_JSON_SCHEMA = {
   required: ["cards"],
   additionalProperties: false,
 } as const;
+
+/**
+ * Distractors for one challenge's multiple-choice questions, generated in a
+ * single batched call (one Claude call per challenge, not one per question).
+ * `index` round-trips the position of the question it belongs to, since the
+ * model may not return items in the order they were asked.
+ */
+export const distractorItem = z.object({
+  index: z.number().int().min(0),
+  distractors: z.array(z.string().trim().min(1).max(500)).length(3),
+});
+
+export const distractorSet = z.object({
+  items: z.array(distractorItem).min(1).max(20),
+});
+
+export type DistractorItem = z.infer<typeof distractorItem>;
+
+export const DISTRACTOR_JSON_SCHEMA = {
+  type: "object",
+  properties: {
+    items: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          index: { type: "integer" },
+          distractors: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 3,
+            maxItems: 3,
+          },
+        },
+        required: ["index", "distractors"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["items"],
+  additionalProperties: false,
+} as const;

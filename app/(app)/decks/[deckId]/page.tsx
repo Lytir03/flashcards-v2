@@ -89,6 +89,15 @@ export default async function DeckPage({
             </Link>
           )}
 
+          {deck.visibility === "public" && (
+            <Link
+              href={`/decks/${deck.id}/leaderboard`}
+              className="rounded-md border border-black/20 px-4 py-2 text-sm dark:border-white/20"
+            >
+              Leaderboard
+            </Link>
+          )}
+
           {draftCount ? (
             <span className="text-sm opacity-60">
               {draftCount} drafts awaiting review

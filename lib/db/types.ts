@@ -483,12 +483,14 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bot_skill_level: string | null
           course_of_study: string | null
           created_at: string
           current_streak: number
           daily_email_enabled: boolean
           display_name: string
           id: string
+          is_bot: boolean
           last_reminded_on: string | null
           last_studied_on: string | null
           longest_streak: number
@@ -500,12 +502,14 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          bot_skill_level?: string | null
           course_of_study?: string | null
           created_at?: string
           current_streak?: number
           daily_email_enabled?: boolean
           display_name: string
           id: string
+          is_bot?: boolean
           last_reminded_on?: string | null
           last_studied_on?: string | null
           longest_streak?: number
@@ -517,12 +521,14 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          bot_skill_level?: string | null
           course_of_study?: string | null
           created_at?: string
           current_streak?: number
           daily_email_enabled?: boolean
           display_name?: string
           id?: string
+          is_bot?: boolean
           last_reminded_on?: string | null
           last_studied_on?: string | null
           longest_streak?: number
