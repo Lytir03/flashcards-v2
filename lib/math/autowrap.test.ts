@@ -40,6 +40,36 @@ describe("wraps bare LaTeX", () => {
   });
 });
 
+describe("wraps literal Unicode a model writes instead of a command", () => {
+  it("wraps a Greek letter with a subscript", () => {
+    expect(autoWrapMath("the multiplier λ_i is nonnegative")).toBe(
+      "the multiplier $λ_i$ is nonnegative",
+    );
+  });
+
+  it("wraps a bare Greek letter with no script at all", () => {
+    expect(autoWrapMath("the multiplier λ is free")).toBe(
+      "the multiplier $λ$ is free",
+    );
+  });
+
+  it("wraps a blackboard-bold letter with a superscript", () => {
+    expect(autoWrapMath("bounded by ℝ^n here")).toBe("bounded by $ℝ^n$ here");
+  });
+
+  it("bridges plain single-letter variables across a Unicode operator", () => {
+    expect(autoWrapMath("we require q ≤ f for all points")).toBe(
+      "we require $q ≤ f$ for all points",
+    );
+  });
+
+  it("wraps set membership written literally", () => {
+    expect(autoWrapMath("holds for x ∈ X and y ∈ Y")).toBe(
+      "holds for $x ∈ X$ and $y ∈ Y$",
+    );
+  });
+});
+
 describe("leaves things alone", () => {
   it("does not touch text that already has delimiters", () => {
     const input = "Already fine: $g_i(x) \\le 0$ and R^n untouched";
@@ -69,6 +99,11 @@ describe("output is renderable", () => {
       "L = f(x) + \\sum_i \\lambda_i g_i(x), with x \\in X.",
       "No maths at all here.",
       "a_{ij} and b^{kl} in one line",
+      // Verbatim from real (Ollama-generated) card content: no \commands at
+      // all, every symbol typed as literal Unicode.
+      "There exist λ_i ≥ 0 such that min_{x ∈ X} f(x) + ∑λ_i g_i(x) ≤ c.",
+      "L(x; λ, μ) = f(x) + ∑_{i=1}^m λ_i g_i(x) + ∑_{j=1}^p μ_j h_j(x)",
+      "For convex set C and y ∉ C, there exists p ∈ ℝ^n such that p^⊤x ≤ p^⊤y for all x ∈ C.",
     ];
     for (const sample of samples) {
       const dollars = (autoWrapMath(sample).match(/\$/g) ?? []).length;

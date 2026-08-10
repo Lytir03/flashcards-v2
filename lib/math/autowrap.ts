@@ -14,8 +14,24 @@
 
 /** A `\command`: \lambda, \sum, \mathbb. */
 const HAS_COMMAND = /\\[a-zA-Z]+/;
-/** A sub- or superscript attached to something: x^2, g_i, R^{n}, a_{ij}. */
-const HAS_SCRIPT = /[A-Za-z0-9})\]]\s*[_^]\s*(?:\{[^{}]*\}|[A-Za-z0-9+\-*]+)/;
+/**
+ * Characters a model writes literally instead of reaching for a command —
+ * Greek letters (λ, μ, Σ — instead of \lambda, \mu, \Sigma), blackboard-bold
+ * letters (ℝ, ℂ, ℕ — instead of \mathbb{R}), and common operators (≤, ∈, ⊤,
+ * ∑ — instead of \le, \in). Smaller local models do this constantly; KaTeX
+ * renders the character fine once it's inside $...$, the gap was only in
+ * recognizing it as math to wrap in the first place.
+ */
+const UNICODE_MATH = /[Ͱ-Ͽ℀-⅏≤≥≠∈∉⊆⊂⊇⊃∪∩→⇒⇐⇔∀∃¬∧∨±∘∑∏∫∂∇⊤⊥∞]/;
+/**
+ * A sub- or superscript attached to something: x^2, g_i, R^{n}, a_{ij},
+ * λ_i, ℝ^n. The attachment point is deliberately broad (anything but
+ * whitespace/$/the script markers themselves) rather than an ASCII
+ * allowlist — underscores and carets essentially never appear in prose, so
+ * there is no real false-positive risk, and a narrow allowlist is exactly
+ * what missed λ_i and ℝ^n here.
+ */
+const HAS_SCRIPT = /[^\s$_^{}]\s*[_^]\s*(?:\{[^{}]*\}|[^\s$_^{}]+)/;
 
 /**
  * Tokens that join two halves of one formula — an operator, a lone variable,
@@ -59,7 +75,9 @@ function splitTrailing(token: string): { body: string; tail: string } {
 function classify(token: string): Kind {
   if (/^\s+$/.test(token)) return "space";
   const { body } = splitTrailing(token);
-  if (HAS_COMMAND.test(body) || HAS_SCRIPT.test(body)) return "math";
+  if (HAS_COMMAND.test(body) || HAS_SCRIPT.test(body) || UNICODE_MATH.test(body)) {
+    return "math";
+  }
   if (CONNECTOR.test(body) && !ENGLISH_SINGLE_LETTERS.has(body)) {
     return "connector";
   }
@@ -70,7 +88,9 @@ export function autoWrapMath(input: string): string {
   // Mixed content is left alone: if delimiters are already in use, guessing
   // about the rest risks nesting $ inside $ and breaking what worked.
   if (!input || input.includes("$")) return input;
-  if (!HAS_COMMAND.test(input) && !HAS_SCRIPT.test(input)) return input;
+  if (!HAS_COMMAND.test(input) && !HAS_SCRIPT.test(input) && !UNICODE_MATH.test(input)) {
+    return input;
+  }
 
   return input.split("\n").map(wrapLine).join("\n");
 }
