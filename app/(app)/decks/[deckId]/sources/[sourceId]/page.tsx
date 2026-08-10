@@ -61,7 +61,7 @@ export default async function SourcePage({
         >
           ← Back to deck
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold break-all">
+        <h1 className="mt-2 text-2xl font-extrabold break-all">
           {source.filename}
         </h1>
         <p className="mt-1 text-sm opacity-60">
@@ -75,16 +75,16 @@ export default async function SourcePage({
       </div>
 
       {source.status === "failed" && (
-        <div className="space-y-3 rounded-lg border border-red-500/40 bg-red-500/5 p-4">
-          <p className="text-sm text-red-500">{source.error_message}</p>
+        <div className="space-y-3 rounded-2xl border border-danger/40 bg-danger/5 p-4">
+          <p className="text-sm font-medium text-danger">{source.error_message}</p>
           <RetryExtractButton sourceId={source.id} />
         </div>
       )}
 
       {source.quality_note && isPdf && (
-        <div className="space-y-4 rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">
+        <div className="space-y-4 rounded-2xl border border-amber-500/40 bg-amber-500/5 p-4">
           <div>
-            <h2 className="text-sm font-medium text-amber-600 dark:text-amber-400">
+            <h2 className="text-sm font-bold text-amber-600 dark:text-amber-400">
               {source.extraction_method === "vision"
                 ? "The transcription still looks off"
                 : "This text came out damaged"}
@@ -106,8 +106,8 @@ export default async function SourcePage({
       )}
 
       {flaggedPages && flaggedPages.length > 0 && (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/5 p-4">
-          <h2 className="text-sm font-medium text-amber-600 dark:text-amber-400">
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/5 p-4">
+          <h2 className="text-sm font-bold text-amber-600 dark:text-amber-400">
             The two readings of this file disagree
           </h2>
           <p className="mt-1 text-sm opacity-70">
@@ -136,8 +136,8 @@ export default async function SourcePage({
 
       {source.status === "extracted" && (
         <>
-          <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-            <h2 className="mb-2 text-sm font-medium opacity-70">
+          <div className="rounded-2xl border border-black/10 p-4 dark:border-white/10">
+            <h2 className="mb-2 text-sm font-bold opacity-70">
               Extracted text{truncated && " (first 4,000 characters)"}
             </h2>
             <pre className="max-h-96 overflow-auto text-xs leading-relaxed whitespace-pre-wrap opacity-80">
@@ -176,7 +176,7 @@ export default async function SourcePage({
         <input type="hidden" name="deck_id" value={deckId} />
         <button
           type="submit"
-          className="text-sm text-red-600 underline hover:opacity-80"
+          className="text-sm font-semibold text-danger underline hover:opacity-80"
         >
           Delete this file
         </button>

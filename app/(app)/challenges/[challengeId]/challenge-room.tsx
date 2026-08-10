@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Math as MathText } from "@/components/ui/math";
+import { Card } from "@/components/ui/card";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 export type Question = {
   id: string;
@@ -114,17 +116,20 @@ export function ChallengeRoom({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between text-xs opacity-60">
-        <span>
-          Question {currentIndex + 1} / {questions.length}
-        </span>
-        <span>{opponentName} has answered {opponentAnswered}</span>
-        <span>{Math.ceil(remainingMs / 1000)}s</span>
+      <div className="space-y-2">
+        <ProgressBar value={secondsPerQuestion * 1000 - remainingMs} max={secondsPerQuestion * 1000} />
+        <div className="flex items-center justify-between text-xs font-semibold opacity-60">
+          <span>
+            Question {currentIndex + 1} / {questions.length}
+          </span>
+          <span>{opponentName} has answered {opponentAnswered}</span>
+          <span>{Math.ceil(remainingMs / 1000)}s</span>
+        </div>
       </div>
 
-      <div className="min-h-32 rounded-lg border border-black/10 p-6 dark:border-white/10">
+      <Card className="min-h-32 p-6">
         <MathText className="block text-lg">{question.question}</MathText>
-      </div>
+      </Card>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {question.choices.map((choice, index) => {
@@ -137,11 +142,11 @@ export function ChallengeRoom({
               onClick={() => choose(index)}
               disabled={answered}
               className={
-                "rounded-md border px-3 py-3 text-left text-sm disabled:cursor-default " +
+                "rounded-xl border px-3 py-3 text-left text-sm font-medium disabled:cursor-default " +
                 (isCorrectChoice
-                  ? "border-emerald-500/60 bg-emerald-500/10"
+                  ? "border-brand bg-brand-light dark:bg-brand/10"
                   : isMyWrongPick
-                    ? "border-red-500/60 bg-red-500/10"
+                    ? "border-danger bg-danger/10"
                     : "border-black/15 dark:border-white/15") +
                 (!answered ? " hover:bg-black/5 dark:hover:bg-white/5" : " opacity-70")
               }

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function RetryExtractButton({ sourceId }: { sourceId: string }) {
   const router = useRouter();
@@ -15,12 +16,8 @@ export function RetryExtractButton({ sourceId }: { sourceId: string }) {
   }
 
   return (
-    <button
-      onClick={retry}
-      disabled={busy}
-      className="rounded-md border border-black/20 px-3 py-1.5 text-sm disabled:opacity-50 dark:border-white/20"
-    >
+    <Button variant="ghost" onClick={retry} disabled={busy}>
       {busy ? "Trying again…" : "Try again"}
-    </button>
+    </Button>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 type Status = "idle" | "running" | "error" | "done";
 
@@ -67,18 +69,11 @@ export function TranscribePanel({
     router.refresh();
   }
 
-  const percent = total > 0 ? Math.round((current / total) * 100) : 0;
-
   return (
     <div className="space-y-3">
       {status === "running" && (
         <div className="space-y-1">
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-            <div
-              className="h-full bg-slate-900 transition-all dark:bg-slate-100"
-              style={{ width: `${percent}%` }}
-            />
-          </div>
+          <ProgressBar value={current} max={total || 1} />
           <p className="text-xs opacity-60">
             Reading page {current + 1}
             {total ? ` of ${total}` : ""}…
@@ -86,28 +81,22 @@ export function TranscribePanel({
         </div>
       )}
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm font-semibold text-danger">{error}</p>}
 
       {status !== "running" && (
         <div className="flex flex-wrap gap-2">
           {(alreadyDone === 0 || status === "error" || current < total) && (
-            <button
-              onClick={() => run()}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-            >
+            <Button onClick={() => run()}>
               {alreadyDone > 0 || status === "error"
                 ? `Resume from page ${Math.max(current, alreadyDone) + 1}`
                 : "Read the pages properly"}
-            </button>
+            </Button>
           )}
 
           {alreadyDone > 0 && (
-            <button
-              onClick={startOver}
-              className="rounded-md border border-black/20 px-4 py-2 text-sm dark:border-white/20"
-            >
+            <Button variant="ghost" onClick={startOver}>
               Read again from page 1
-            </button>
+            </Button>
           )}
         </div>
       )}

@@ -8,7 +8,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Settings</h1>
 
       <SettingsForm
         displayName={profile?.display_name ?? ""}

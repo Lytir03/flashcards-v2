@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { Swords } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +11,31 @@ function opponentLabel(
   isBot: boolean,
   skill: string | null,
 ) {
-  return isBot ? `${displayName} 🤖 ${skill}` : displayName ?? "Someone";
+  return isBot ? `${displayName} 🤖 ${skill}` : (displayName ?? "Someone");
+}
+
+function ChallengeRow({
+  href,
+  headline,
+  deckName,
+  cta,
+}: {
+  href: string;
+  headline: React.ReactNode;
+  deckName?: string | null;
+  cta?: string;
+}) {
+  return (
+    <Link href={href}>
+      <Card interactive className="flex items-center justify-between gap-4">
+        <span>
+          {headline}
+          {deckName && <span className="opacity-70"> on {deckName}</span>}
+        </span>
+        {cta && <span className="shrink-0 text-sm font-bold text-brand-dark dark:text-brand">{cta}</span>}
+      </Card>
+    </Link>
+  );
 }
 
 export default async function ChallengesPage() {
@@ -36,119 +63,118 @@ export default async function ChallengesPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Challenges</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">Challenges</h1>
           <p className="mt-1 text-sm opacity-60">Quiz duels on a shared deck.</p>
         </div>
-        <Link
-          href="/challenges/new"
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-        >
-          New challenge
+        <Link href="/challenges/new">
+          <Button>New challenge</Button>
         </Link>
       </div>
 
       {invitesToMe.length > 0 && (
         <section>
-          <h2 className="text-sm font-medium opacity-70">Invites</h2>
-          <ul className="mt-2 divide-y divide-black/10 dark:divide-white/10">
+          <h2 className="text-sm font-bold opacity-70">Invites</h2>
+          <div className="mt-2 space-y-2">
             {invitesToMe.map((c) => (
-              <li key={c.id}>
-                <Link
-                  href={`/challenges/${c.id}`}
-                  className="flex items-baseline justify-between gap-4 py-4 hover:opacity-70"
-                >
-                  <span>
-                    <span className="font-medium">
+              <ChallengeRow
+                key={c.id}
+                href={`/challenges/${c.id}`}
+                deckName={c.decks?.name}
+                cta="Respond"
+                headline={
+                  <>
+                    <span className="font-bold">
                       {opponentLabel(c.challenger?.display_name ?? null, c.challenger?.is_bot ?? false, c.challenger?.bot_skill_level ?? null)}
                     </span>{" "}
-                    challenged you on <span className="opacity-70">{c.decks?.name}</span>
-                  </span>
-                  <span className="shrink-0 text-sm opacity-50">Respond</span>
-                </Link>
-              </li>
+                    challenged you
+                  </>
+                }
+              />
             ))}
-          </ul>
+          </div>
         </section>
       )}
 
       {active.length > 0 && (
         <section>
-          <h2 className="text-sm font-medium opacity-70">Active</h2>
-          <ul className="mt-2 divide-y divide-black/10 dark:divide-white/10">
+          <h2 className="text-sm font-bold opacity-70">Active</h2>
+          <div className="mt-2 space-y-2">
             {active.map((c) => {
               const opponent = c.challenger_id === user.id ? c.opponent : c.challenger;
               return (
-                <li key={c.id}>
-                  <Link
-                    href={`/challenges/${c.id}`}
-                    className="flex items-baseline justify-between gap-4 py-4 hover:opacity-70"
-                  >
-                    <span>
+                <ChallengeRow
+                  key={c.id}
+                  href={`/challenges/${c.id}`}
+                  deckName={c.decks?.name}
+                  cta="Jump back in"
+                  headline={
+                    <>
                       vs{" "}
-                      <span className="font-medium">
+                      <span className="font-bold">
                         {opponentLabel(opponent?.display_name ?? null, opponent?.is_bot ?? false, opponent?.bot_skill_level ?? null)}
-                      </span>{" "}
-                      on <span className="opacity-70">{c.decks?.name}</span>
-                    </span>
-                    <span className="shrink-0 text-sm opacity-50">Jump back in</span>
-                  </Link>
-                </li>
+                      </span>
+                    </>
+                  }
+                />
               );
             })}
-          </ul>
+          </div>
         </section>
       )}
 
       {waitingOnOthers.length > 0 && (
         <section>
-          <h2 className="text-sm font-medium opacity-70">Waiting on others</h2>
-          <ul className="mt-2 divide-y divide-black/10 dark:divide-white/10">
+          <h2 className="text-sm font-bold opacity-70">Waiting on others</h2>
+          <div className="mt-2 space-y-2">
             {waitingOnOthers.map((c) => (
-              <li key={c.id} className="flex items-baseline justify-between gap-4 py-4">
+              <Card key={c.id} className="flex items-center justify-between gap-4">
                 <span>
-                  <span className="font-medium">
+                  <span className="font-bold">
                     {opponentLabel(c.opponent?.display_name ?? null, c.opponent?.is_bot ?? false, c.opponent?.bot_skill_level ?? null)}
                   </span>{" "}
-                  hasn&apos;t responded yet · <span className="opacity-70">{c.decks?.name}</span>
+                  hasn&apos;t responded yet
+                  {c.decks?.name && <span className="opacity-70"> · {c.decks.name}</span>}
                 </span>
-              </li>
+              </Card>
             ))}
-          </ul>
+          </div>
         </section>
       )}
 
       {recent.length > 0 && (
         <section>
-          <h2 className="text-sm font-medium opacity-70">Recent</h2>
-          <ul className="mt-2 divide-y divide-black/10 dark:divide-white/10">
+          <h2 className="text-sm font-bold opacity-70">Recent</h2>
+          <div className="mt-2 space-y-2">
             {recent.map((c) => {
               const opponent = c.challenger_id === user.id ? c.opponent : c.challenger;
               return (
-                <li key={c.id}>
-                  <Link
-                    href={`/challenges/${c.id}`}
-                    className="flex items-baseline justify-between gap-4 py-4 hover:opacity-70"
-                  >
-                    <span>
+                <ChallengeRow
+                  key={c.id}
+                  href={`/challenges/${c.id}`}
+                  deckName={c.decks?.name}
+                  cta="Results"
+                  headline={
+                    <>
                       vs{" "}
-                      <span className="font-medium">
+                      <span className="font-bold">
                         {opponentLabel(opponent?.display_name ?? null, opponent?.is_bot ?? false, opponent?.bot_skill_level ?? null)}
-                      </span>{" "}
-                      on <span className="opacity-70">{c.decks?.name}</span>
-                    </span>
-                    <span className="shrink-0 text-sm opacity-50">Results</span>
-                  </Link>
-                </li>
+                      </span>
+                    </>
+                  }
+                />
               );
             })}
-          </ul>
+          </div>
         </section>
       )}
 
       {rows.length === 0 && (
-        <p className="py-8 text-sm opacity-60">
-          No challenges yet. Start one from a public deck.
-        </p>
+        <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
+          <Swords className="mx-auto size-10 text-brand" strokeWidth={1.5} />
+          <p className="mt-3 text-sm opacity-70">
+            No challenges yet. Start one from a public deck.
+          </p>
+        </div>
       )}
     </div>
   );

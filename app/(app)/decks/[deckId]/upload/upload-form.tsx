@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { FormError, Label } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { registerSource } from "../sources/actions";
 
 const MAX_BYTES = 25 * 1024 * 1024;
@@ -114,7 +115,7 @@ export function UploadForm({ deckId }: { deckId: string }) {
           type="file"
           accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown"
           disabled={busy}
-          className="mt-1 block w-full text-sm file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:text-white dark:file:bg-slate-100 dark:file:text-slate-900"
+          className="mt-1 block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-brand file:px-3 file:py-2 file:text-sm file:font-bold file:text-white"
         />
         <p className="mt-2 text-xs opacity-60">
           PDF, .txt or .md, up to 25 MB. Slides exported to PDF work well;
@@ -124,17 +125,13 @@ export function UploadForm({ deckId }: { deckId: string }) {
 
       <FormError message={error} />
 
-      <button
-        type="submit"
-        disabled={busy}
-        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900"
-      >
+      <Button type="submit" disabled={busy}>
         {phase === "uploading"
           ? "Uploading…"
           : phase === "extracting"
             ? "Reading the text…"
             : "Upload"}
-      </button>
+      </Button>
     </form>
   );
 }

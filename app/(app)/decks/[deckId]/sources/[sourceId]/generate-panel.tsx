@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function GeneratePanel({
   sourceId,
@@ -56,20 +57,16 @@ export function GeneratePanel({
   }
 
   return (
-    <div className="space-y-3 rounded-lg border border-black/10 p-4 dark:border-white/10">
+    <div className="space-y-3 rounded-2xl border border-black/10 p-4 dark:border-white/10">
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          onClick={run}
-          disabled={running}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900"
-        >
+        <Button onClick={run} disabled={running}>
           {running ? "Writing cards…" : "Generate flashcards"}
-        </button>
+        </Button>
 
         {draftCount > 0 && (
           <a
             href={`/decks/${deckId}/sources/${sourceId}/cards`}
-            className="text-sm underline opacity-70 hover:opacity-100"
+            className="text-sm font-semibold text-brand-dark underline hover:opacity-80 dark:text-brand"
           >
             {draftCount} drafts waiting for review
           </a>
@@ -82,7 +79,7 @@ export function GeneratePanel({
         </p>
       )}
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm font-semibold text-danger">{error}</p>}
 
       <p className="text-xs opacity-50">
         Cards arrive as drafts. Nothing is scheduled for review until you

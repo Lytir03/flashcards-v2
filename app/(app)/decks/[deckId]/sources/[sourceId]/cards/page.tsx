@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireOnboardedUser } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 import { approveAll, approveUnflagged } from "./actions";
 import { CardEditor, type DraftCard } from "./card-editor";
 
@@ -53,7 +54,7 @@ export default async function ReviewCardsPage({
         >
           ← {source.filename}
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">Review cards</h1>
+        <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Review cards</h1>
         <p className="mt-1 text-sm opacity-60">
           {drafts.length === 0
             ? "Nothing waiting for review."
@@ -62,29 +63,21 @@ export default async function ReviewCardsPage({
       </div>
 
       {drafts.length > 0 && (
-        <div className="space-y-3 rounded-lg border border-black/10 p-4 text-sm dark:border-white/10">
+        <div className="space-y-3 rounded-2xl border border-black/10 p-4 text-sm dark:border-white/10">
           <div className="flex flex-wrap items-center gap-3">
             <form action={approveAll}>
               <input type="hidden" name="source_id" value={sourceId} />
               <input type="hidden" name="return_to" value={returnTo} />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-              >
-                Approve all {drafts.length}
-              </button>
+              <Button type="submit">Approve all {drafts.length}</Button>
             </form>
 
             {disputedCount > 0 && (
               <form action={approveUnflagged}>
                 <input type="hidden" name="source_id" value={sourceId} />
                 <input type="hidden" name="return_to" value={returnTo} />
-                <button
-                  type="submit"
-                  className="rounded-md border border-black/20 px-4 py-2 dark:border-white/20"
-                >
+                <Button type="submit" variant="ghost">
                   Approve only the {drafts.length - disputedCount} unflagged
-                </button>
+                </Button>
               </form>
             )}
           </div>

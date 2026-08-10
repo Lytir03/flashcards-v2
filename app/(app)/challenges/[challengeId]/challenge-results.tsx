@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Trophy } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import type { Participant } from "./challenge-view";
 
 export type ResultRow = {
@@ -13,20 +15,23 @@ function Row({
   participant,
   result,
   isMe,
+  won,
 }: {
   participant: Participant;
   result: ResultRow | undefined;
   isMe: boolean;
+  won: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <p className="text-sm font-medium">
+    <Card className={won ? "ring-2 ring-brand" : ""}>
+      <p className="flex items-center gap-1.5 text-sm font-bold">
+        {won && <Trophy className="size-4 text-gold" fill="currentColor" />}
         {isMe ? "You" : participant.display_name}
         {participant.is_bot && ` 🤖 ${participant.bot_skill_level}`}
       </p>
       {result ? (
         <>
-          <p className="mt-2 text-2xl font-semibold">{result.score}</p>
+          <p className="mt-2 text-2xl font-extrabold">{result.score}</p>
           <p className="text-xs opacity-60">
             {result.correct_count} correct · {Math.round(result.total_time_ms / 1000)}s total
           </p>
@@ -34,7 +39,7 @@ function Row({
       ) : (
         <p className="mt-2 text-sm opacity-60">…</p>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -68,18 +73,34 @@ export function ChallengeResults({
 
   return (
     <div className="space-y-6">
-      <p className="text-center text-lg font-medium">{headline}</p>
+      {winnerId && results.length > 0 && (
+        <Trophy className="mx-auto size-12 text-gold" fill="currentColor" strokeWidth={1} />
+      )}
+      <p className="text-center text-2xl font-extrabold">{headline}</p>
 
       <div className="grid grid-cols-2 gap-4">
-        <Row participant={challenger} result={challengerResult} isMe={challenger.id === currentUserId} />
-        <Row participant={opponent} result={opponentResult} isMe={opponent.id === currentUserId} />
+        <Row
+          participant={challenger}
+          result={challengerResult}
+          isMe={challenger.id === currentUserId}
+          won={winnerId === challenger.id}
+        />
+        <Row
+          participant={opponent}
+          result={opponentResult}
+          isMe={opponent.id === currentUserId}
+          won={winnerId === opponent.id}
+        />
       </div>
 
-      <div className="flex justify-center gap-4 text-sm">
-        <Link href="/challenges" className="underline opacity-70 hover:opacity-100">
+      <div className="flex justify-center gap-4 text-sm font-semibold">
+        <Link href="/challenges" className="text-brand-dark underline hover:opacity-80 dark:text-brand">
           Back to challenges
         </Link>
-        <Link href={`/decks/${deckId}/leaderboard`} className="underline opacity-70 hover:opacity-100">
+        <Link
+          href={`/decks/${deckId}/leaderboard`}
+          className="text-brand-dark underline hover:opacity-80 dark:text-brand"
+        >
           View leaderboard
         </Link>
       </div>

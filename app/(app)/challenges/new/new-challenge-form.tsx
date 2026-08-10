@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError, Input, Label } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 
 type Deck = { id: string; name: string; card_count: number };
 type Bot = { username: string; display_name: string; bot_skill_level: string | null };
@@ -36,7 +37,7 @@ export function NewChallengeForm({ decks, bots }: { decks: Deck[]; bots: Bot[] }
 
   if (decks.length === 0) {
     return (
-      <p className="rounded-lg border border-dashed border-black/20 p-8 text-center text-sm opacity-60 dark:border-white/20">
+      <p className="rounded-2xl border border-dashed border-black/15 p-8 text-center text-sm opacity-60 dark:border-white/15">
         No public deck has enough approved cards yet. Make a deck public and
         approve at least 7 cards to challenge someone on it.
       </p>
@@ -51,7 +52,7 @@ export function NewChallengeForm({ decks, bots }: { decks: Deck[]; bots: Bot[] }
           id="deck_id"
           value={deckId}
           onChange={(event) => setDeckId(event.target.value)}
-          className="mt-1 w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm dark:border-white/15"
+          className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
         >
           {decks.map((deck) => (
             <option key={deck.id} value={deck.id}>
@@ -74,31 +75,35 @@ export function NewChallengeForm({ decks, bots }: { decks: Deck[]; bots: Bot[] }
 
       {bots.length > 0 && (
         <div>
-          <p className="text-sm font-medium opacity-80">Or practice against a bot</p>
+          <p className="text-sm font-bold opacity-80">Or practice against a bot</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {bots.map((bot) => (
-              <button
-                key={bot.username}
-                type="button"
-                onClick={() => setOpponentUsername(bot.username)}
-                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5"
-              >
-                {bot.display_name} · {bot.bot_skill_level}
-              </button>
-            ))}
+            {bots.map((bot) => {
+              const selected = opponentUsername === bot.username;
+              return (
+                <button
+                  key={bot.username}
+                  type="button"
+                  onClick={() => setOpponentUsername(bot.username)}
+                  className={
+                    "rounded-full border px-3 py-1.5 text-sm font-semibold transition " +
+                    (selected
+                      ? "border-brand bg-brand-light text-brand-dark dark:bg-brand/10 dark:text-brand"
+                      : "border-black/15 hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5")
+                  }
+                >
+                  {bot.display_name} · {bot.bot_skill_level}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
       <FormError message={error} />
 
-      <button
-        type="submit"
-        disabled={busy}
-        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900"
-      >
+      <Button type="submit" disabled={busy}>
         {busy ? "Sending…" : "Send challenge"}
-      </button>
+      </Button>
     </form>
   );
 }

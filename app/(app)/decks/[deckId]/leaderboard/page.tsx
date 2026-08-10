@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Trophy } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
+import { Card } from "@/components/ui/card";
 
 export const dynamic = "force-dynamic";
+
+const RANK_BADGE = [
+  "bg-gold/20 text-gold-dark dark:text-gold", // 1st
+  "bg-black/10 text-slate-600 dark:bg-white/10 dark:text-slate-300", // 2nd
+  "bg-amber-500/15 text-amber-700 dark:text-amber-400", // 3rd
+];
 
 export default async function LeaderboardPage({
   params,
@@ -29,28 +37,31 @@ export default async function LeaderboardPage({
         <Link href={`/decks/${deckId}`} className="text-sm opacity-60 hover:opacity-100">
           ← {deck.name}
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">Weekly leaderboard</h1>
+        <h1 className="mt-1 text-3xl font-extrabold tracking-tight">Weekly leaderboard</h1>
         <p className="mt-1 text-sm opacity-60">Human matches this week, ranked by total score.</p>
       </div>
 
       {rows && rows.length > 0 ? (
-        <ol className="divide-y divide-black/10 dark:divide-white/10">
+        <div className="space-y-2">
           {rows.map((row, index) => (
-            <li key={row.user_id} className="flex items-baseline justify-between gap-4 py-4">
-              <span>
-                <span className="mr-2 text-sm opacity-40">{index + 1}</span>
-                <span className="font-medium">{row.display_name}</span>
+            <Card key={row.user_id} className="flex items-center gap-4">
+              <span
+                className={
+                  "flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-extrabold " +
+                  (RANK_BADGE[index] ?? "bg-black/5 opacity-50 dark:bg-white/10")
+                }
+              >
+                {index === 0 ? <Trophy className="size-4" fill="currentColor" /> : index + 1}
               </span>
-              <span className="shrink-0 text-sm opacity-50">
+              <span className="min-w-0 flex-1 font-bold">{row.display_name}</span>
+              <span className="shrink-0 text-sm opacity-60">
                 {row.total_score} pts · {row.wins}/{row.matches_played} won
               </span>
-            </li>
+            </Card>
           ))}
-        </ol>
+        </div>
       ) : (
-        <p className="py-8 text-sm opacity-60">
-          No matches on this deck this week yet.
-        </p>
+        <p className="py-8 text-sm opacity-60">No matches on this deck this week yet.</p>
       )}
     </div>
   );

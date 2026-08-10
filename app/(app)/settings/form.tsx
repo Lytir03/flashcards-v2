@@ -51,6 +51,7 @@ export function SettingsForm({
             type="checkbox"
             name="daily_email_enabled"
             defaultChecked={dailyEmailEnabled}
+            className="size-4 accent-brand"
           />
           Email me when cards are due
         </label>
@@ -61,7 +62,7 @@ export function SettingsForm({
             id="reminder_hour"
             name="reminder_hour"
             defaultValue={reminderHour}
-            className="mt-1 w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm dark:border-white/15"
+            className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
           >
             {HOURS.map((hour) => (
               <option key={hour} value={hour}>
@@ -84,7 +85,7 @@ export function SettingsForm({
             <button
               type="button"
               onClick={() => setZone(browserZone)}
-              className="mt-1 text-xs underline opacity-60 hover:opacity-100"
+              className="mt-1 text-xs font-semibold text-brand-dark underline hover:opacity-80 dark:text-brand"
             >
               Use {browserZone}, from this device
             </button>
@@ -93,7 +94,7 @@ export function SettingsForm({
       </fieldset>
 
       <FormError message={state?.error} />
-      {state?.saved && <p className="text-sm opacity-60">Saved.</p>}
+      {state?.saved && <p className="text-sm font-semibold text-brand-dark dark:text-brand">Saved.</p>}
 
       <SubmitButton>Save</SubmitButton>
     </form>

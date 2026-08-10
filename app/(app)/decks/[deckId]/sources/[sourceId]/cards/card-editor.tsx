@@ -38,7 +38,7 @@ export function CardEditor({
   const [answer, setAnswer] = useState(card.answer);
 
   return (
-    <li className="rounded-lg border border-black/10 p-4 dark:border-white/10">
+    <li className="rounded-2xl border border-black/10 p-4 dark:border-white/10">
       <div className="flex items-start justify-between gap-4">
         <span className="text-xs opacity-50">
           {card.source_page_number
@@ -139,7 +139,7 @@ export function CardEditor({
         <input type="hidden" name="return_to" value={returnTo} />
         <button
           type="submit"
-          className="text-xs text-red-600 underline hover:opacity-80"
+          className="text-xs font-semibold text-danger underline hover:opacity-80"
         >
           Discard
         </button>

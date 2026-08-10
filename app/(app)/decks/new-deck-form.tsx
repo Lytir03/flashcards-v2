@@ -8,6 +8,7 @@ import {
   SubmitButton,
   Textarea,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { createDeck } from "./actions";
 import { DECK_COLORS } from "./constants";
 
@@ -35,21 +36,14 @@ export function NewDeckForm() {
   }
 
   if (!open) {
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-      >
-        New deck
-      </button>
-    );
+    return <Button onClick={() => setOpen(true)}>New deck</Button>;
   }
 
   return (
     <form
       ref={formRef}
       action={handleSubmit}
-      className="w-full max-w-sm space-y-4 rounded-lg border border-black/10 p-4 dark:border-white/10"
+      className="w-full max-w-sm space-y-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
     >
       <div>
         <Label htmlFor="name">Name</Label>
@@ -67,7 +61,7 @@ export function NewDeckForm() {
           id="color"
           name="color"
           defaultValue="slate"
-          className="mt-1 w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm dark:border-white/15"
+          className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
         >
           {DECK_COLORS.map((c) => (
             <option key={c} value={c}>
@@ -81,13 +75,9 @@ export function NewDeckForm() {
 
       <div className="flex gap-2">
         <SubmitButton>Create</SubmitButton>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="rounded-md px-4 py-2 text-sm opacity-60 hover:opacity-100"
-        >
+        <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );

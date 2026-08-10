@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Hourglass } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { RespondForm } from "./respond-form";
 import { ChallengeRoom, type Question } from "./challenge-room";
@@ -126,8 +127,9 @@ export function ChallengeView({
       );
     }
     return (
-      <div className="rounded-lg border border-dashed border-black/20 p-8 text-center dark:border-white/20">
-        <p className="text-sm opacity-70">
+      <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
+        <Hourglass className="mx-auto size-8 text-brand" strokeWidth={1.5} />
+        <p className="mt-3 text-sm opacity-70">
           Waiting for {opponentOf.display_name} to respond…
         </p>
       </div>
@@ -135,11 +137,11 @@ export function ChallengeView({
   }
 
   if (status === "declined") {
-    return <p className="py-8 text-sm opacity-60">{opponentOf.display_name} declined this challenge.</p>;
+    return <p className="py-8 text-center text-sm opacity-60">{opponentOf.display_name} declined this challenge.</p>;
   }
 
   if (status === "expired") {
-    return <p className="py-8 text-sm opacity-60">This challenge expired before it was answered.</p>;
+    return <p className="py-8 text-center text-sm opacity-60">This challenge expired before it was answered.</p>;
   }
 
   if (status === "active") {

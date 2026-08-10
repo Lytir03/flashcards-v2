@@ -31,7 +31,7 @@ export default async function UploadPage({
         >
           ← {deck.name}
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">Add material</h1>
+        <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Add material</h1>
       </div>
 
       <UploadForm deckId={deck.id} />

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FileStack } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
 import { Math } from "@/components/ui/math";
+import { Button } from "@/components/ui/button";
 import { deleteDeck, setDeckVisibility } from "../actions";
 import { EditDeckForm } from "./edit-deck-form";
 
@@ -60,7 +62,7 @@ export default async function DeckPage({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold">{deck.name}</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">{deck.name}</h1>
         {deck.description && (
           <p className="mt-1 text-sm opacity-60">{deck.description}</p>
         )}
@@ -70,31 +72,22 @@ export default async function DeckPage({
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           {dueCount ? (
-            <Link
-              href={`/decks/${deck.id}/review`}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-            >
-              Review {dueCount} due
+            <Link href={`/decks/${deck.id}/review`}>
+              <Button>Review {dueCount} due</Button>
             </Link>
           ) : (
             <span className="text-sm opacity-50">Nothing due today.</span>
           )}
 
           {deck.card_count > 0 && (
-            <Link
-              href={`/decks/${deck.id}/review?mode=practice`}
-              className="rounded-md border border-black/20 px-4 py-2 text-sm dark:border-white/20"
-            >
-              Practice
+            <Link href={`/decks/${deck.id}/review?mode=practice`}>
+              <Button variant="ghost">Practice</Button>
             </Link>
           )}
 
           {deck.visibility === "public" && (
-            <Link
-              href={`/decks/${deck.id}/leaderboard`}
-              className="rounded-md border border-black/20 px-4 py-2 text-sm dark:border-white/20"
-            >
-              Leaderboard
+            <Link href={`/decks/${deck.id}/leaderboard`}>
+              <Button variant="ghost">Leaderboard</Button>
             </Link>
           )}
 
@@ -108,13 +101,10 @@ export default async function DeckPage({
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-medium">Material</h2>
+          <h2 className="font-bold">Material</h2>
           {isOwner && (
-            <Link
-              href={`/decks/${deck.id}/upload`}
-              className="rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-            >
-              Add file
+            <Link href={`/decks/${deck.id}/upload`}>
+              <Button>Add file</Button>
             </Link>
           )}
         </div>
@@ -132,7 +122,7 @@ export default async function DeckPage({
                     className={
                       "shrink-0 text-xs " +
                       (source.status === "failed"
-                        ? "text-red-500"
+                        ? "font-semibold text-danger"
                         : "opacity-50")
                     }
                   >
@@ -146,15 +136,18 @@ export default async function DeckPage({
             ))}
           </ul>
         ) : (
-          <p className="rounded-lg border border-dashed border-black/20 p-8 text-center text-sm opacity-60 dark:border-white/20">
-            No material yet. Upload lecture slides or notes to generate cards
-            from.
-          </p>
+          <div className="rounded-2xl border border-dashed border-black/15 p-8 text-center dark:border-white/15">
+            <FileStack className="mx-auto size-8 text-brand" strokeWidth={1.5} />
+            <p className="mt-3 text-sm opacity-60">
+              No material yet. Upload lecture slides or notes to generate cards
+              from.
+            </p>
+          </div>
         )}
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-medium">Cards</h2>
+        <h2 className="font-bold">Cards</h2>
 
         {cards && cards.length > 0 ? (
           <ul className="divide-y divide-black/10 dark:divide-white/10">
@@ -179,7 +172,7 @@ export default async function DeckPage({
             ))}
           </ul>
         ) : (
-          <p className="rounded-lg border border-dashed border-black/20 p-8 text-center text-sm opacity-60 dark:border-white/20">
+          <p className="rounded-2xl border border-dashed border-black/15 p-8 text-center text-sm opacity-60 dark:border-white/15">
             No approved cards yet.
           </p>
         )}
@@ -214,7 +207,7 @@ export default async function DeckPage({
             <input type="hidden" name="deck_id" value={deck.id} />
             <button
               type="submit"
-              className="text-sm text-red-600 underline hover:opacity-80"
+              className="text-sm font-semibold text-danger underline hover:opacity-80"
             >
               Delete deck and all its cards
             </button>
