@@ -12,7 +12,7 @@ export function Card({
   return (
     <div
       className={[
-        "rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/5",
+        "rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.07]",
         interactive ? "transition hover:-translate-y-0.5 hover:shadow-md" : "",
         className,
       ]

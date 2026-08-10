@@ -67,7 +67,7 @@ export function Math({
           });
         } catch {
           return (
-            <code key={index} className="text-red-500">
+            <code key={index} className="text-danger">
               {segment.value}
             </code>
           );

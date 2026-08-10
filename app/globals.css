@@ -18,7 +18,10 @@
 }
 
 :root {
-  --background: #ffffff;
+  /* A flat white page made every white Card blend into the background —
+     nothing floated. A soft neutral behind white cards is what actually
+     produces the "elevated card" look the shadow/border alone couldn't. */
+  --background: #f5f6fb;
   --foreground: #0f172a;
 }
 

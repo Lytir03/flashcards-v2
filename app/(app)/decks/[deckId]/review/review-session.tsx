@@ -19,10 +19,13 @@ export type ReviewCard = {
   source_page_number: number | null;
 };
 
+// Cosmetic only — these are display labels, not the SM-2 input. The
+// underlying rating ("again"/"hard"/"good"/"easy") and its interval math in
+// lib/srs/sm2.ts are unchanged; only the button text reads friendlier.
 const LABELS: Record<Rating, string> = {
-  again: "Again",
+  again: "Missed it",
   hard: "Hard",
-  good: "Good",
+  good: "Got it",
   easy: "Easy",
 };
 

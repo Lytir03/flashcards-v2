@@ -75,7 +75,7 @@ export function CardEditor({
         />
       )}
 
-      <div className="mt-3 rounded-md bg-black/[0.03] p-3 dark:bg-white/[0.04]">
+      <div className="mt-3 rounded-xl bg-black/[0.03] p-3 dark:bg-white/[0.04]">
         <Math className="block text-sm font-medium">{question}</Math>
         <hr className="my-2 border-black/10 dark:border-white/10" />
         <Math className="block text-sm opacity-80">{answer}</Math>

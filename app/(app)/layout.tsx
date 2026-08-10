@@ -22,7 +22,7 @@ export default async function AppLayout({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-black/5 dark:border-white/10">
+      <header className="sticky top-0 z-10 border-b border-black/5 bg-white/90 backdrop-blur dark:border-white/10 dark:bg-[#0b1120]/90">
         <nav className="mx-auto flex max-w-3xl items-center gap-2 px-6 py-4 text-sm">
           <Link href="/dashboard" className="flex items-center gap-1.5 pr-4 font-extrabold text-lg">
             <Flame className="size-5 text-gold" fill="currentColor" />
