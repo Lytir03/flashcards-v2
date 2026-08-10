@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Layers } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
+import { DeckIllustration } from "@/components/ui/deck-illustration";
 import { DECK_COLOR_CLASSES } from "@/lib/deck-colors";
 import type { DeckColor } from "./constants";
 import { NewDeckForm } from "./new-deck-form";
@@ -65,7 +65,7 @@ export default async function DecksPage() {
       ) : (
         !error && (
           <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
-            <Layers className="mx-auto size-10 text-brand" strokeWidth={1.5} />
+            <DeckIllustration className="mx-auto h-16 w-16" />
             <p className="mt-3 text-sm opacity-70">No decks yet. Create one to get started.</p>
           </div>
         )

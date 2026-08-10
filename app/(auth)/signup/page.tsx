@@ -6,8 +6,8 @@ import { GoogleButton } from "@/components/auth/google-button";
 export default function SignupPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold">Create an account</h1>
+      <div className="text-center">
+        <h1 className="text-2xl font-extrabold">Create an account</h1>
         <p className="mt-1 text-sm opacity-60">
           Upload your lecture notes, get flashcards back.
         </p>

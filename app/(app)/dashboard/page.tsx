@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { BookOpen, ChevronRight, Flame, Sparkles } from "lucide-react";
+import { ChevronRight, Flame, Sparkles } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { DeckIllustration } from "@/components/ui/deck-illustration";
 import { DECK_COLOR_CLASSES } from "@/lib/deck-colors";
 import type { DeckColor } from "../decks/constants";
 
@@ -65,7 +66,7 @@ export default async function DashboardPage() {
 
       {deckCount === 0 ? (
         <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
-          <BookOpen className="mx-auto size-10 text-brand" strokeWidth={1.5} />
+          <DeckIllustration className="mx-auto h-16 w-16" />
           <p className="mt-3 text-sm opacity-70">
             No decks yet. A deck is one subject or course.
           </p>
