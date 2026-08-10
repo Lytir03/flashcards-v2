@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Check, Meh, Trophy, X, Zap } from "lucide-react";
 import { Math } from "@/components/ui/math";
+import { Button, type ButtonVariant } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ProgressBar } from "@/components/ui/progress-bar";
 import { RATINGS, type Rating } from "@/lib/srs/sm2";
 
 export type ReviewCard = {
@@ -20,6 +24,20 @@ const LABELS: Record<Rating, string> = {
   hard: "Hard",
   good: "Good",
   easy: "Easy",
+};
+
+const VARIANTS: Record<Rating, ButtonVariant> = {
+  again: "danger",
+  hard: "gold",
+  good: "primary",
+  easy: "secondary",
+};
+
+const ICONS: Record<Rating, typeof X> = {
+  again: X,
+  hard: Meh,
+  good: Check,
+  easy: Zap,
 };
 
 const KEYS: Record<string, Rating> = {
@@ -100,17 +118,14 @@ export function ReviewSession({
 
   if (!card) {
     return (
-      <div className="space-y-4 py-12 text-center">
-        <p className="text-lg font-medium">Done for today.</p>
+      <div className="space-y-4 py-16 text-center">
+        <Trophy className="mx-auto size-14 text-gold" fill="currentColor" strokeWidth={1} />
+        <p className="text-2xl font-extrabold">Done for today!</p>
         <p className="text-sm opacity-60">
           {done} {done === 1 ? "card" : "cards"} reviewed.
         </p>
-        <Link
-          href={`/decks/${deckId}`}
-          className="inline-block rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-          onClick={() => router.refresh()}
-        >
-          Back to the deck
+        <Link href={`/decks/${deckId}`} onClick={() => router.refresh()}>
+          <Button size="lg">Back to the deck</Button>
         </Link>
       </div>
     );
@@ -118,15 +133,22 @@ export function ReviewSession({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between text-xs opacity-60">
-        <span>
-          {queue.length} left
-          {practice && " · practice, the schedule is not affected"}
-        </span>
-        {card.topic && <span>{card.topic}</span>}
+      <div className="space-y-2">
+        <ProgressBar value={done} max={cards.length} />
+        <div className="flex items-center justify-between text-xs opacity-60">
+          <span>
+            {queue.length} left
+            {practice && " · practice, the schedule is not affected"}
+          </span>
+          {card.topic && (
+            <span className="rounded-full bg-brand-light px-2 py-0.5 font-semibold text-brand-dark dark:bg-brand/10 dark:text-brand">
+              {card.topic}
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="min-h-48 rounded-lg border border-black/10 p-6 dark:border-white/10">
+      <Card className="min-h-48 p-8">
         <Math className="block text-lg">{card.question}</Math>
 
         {revealed && (
@@ -156,32 +178,32 @@ export function ReviewSession({
             )}
           </>
         )}
-      </div>
+      </Card>
 
       {revealed ? (
         <div className="grid grid-cols-4 gap-2">
-          {RATINGS.map((rating, index) => (
-            <button
-              key={rating}
-              onClick={() => answer(rating)}
-              disabled={busy}
-              className="rounded-md border border-black/15 px-3 py-3 text-sm disabled:opacity-50 hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5"
-            >
-              {LABELS[rating]}
-              <span className="mt-0.5 block text-[10px] opacity-40">
-                {index + 1}
-              </span>
-            </button>
-          ))}
+          {RATINGS.map((rating, index) => {
+            const Icon = ICONS[rating];
+            return (
+              <Button
+                key={rating}
+                variant={VARIANTS[rating]}
+                onClick={() => answer(rating)}
+                disabled={busy}
+                className="flex flex-col items-center gap-0.5"
+              >
+                <Icon className="size-4" />
+                {LABELS[rating]}
+                <span className="block text-[10px] opacity-70">{index + 1}</span>
+              </Button>
+            );
+          })}
         </div>
       ) : (
-        <button
-          onClick={() => setRevealed(true)}
-          className="w-full rounded-md bg-slate-900 px-4 py-3 text-sm font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-        >
+        <Button size="lg" fullWidth onClick={() => setRevealed(true)}>
           Show answer
-          <span className="ml-2 opacity-50">space</span>
-        </button>
+          <span className="ml-2 opacity-70">space</span>
+        </Button>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Flame } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
 import { signOut } from "@/app/(auth)/actions";
 
@@ -21,15 +22,20 @@ export default async function AppLayout({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-black/10 dark:border-white/10">
-        <nav className="mx-auto flex max-w-3xl items-center gap-6 px-6 py-4 text-sm">
-          <Link href="/dashboard" className="font-semibold">
+      <header className="border-b border-black/5 dark:border-white/10">
+        <nav className="mx-auto flex max-w-3xl items-center gap-2 px-6 py-4 text-sm">
+          <Link href="/dashboard" className="flex items-center gap-1.5 pr-4 font-extrabold text-lg">
+            <Flame className="size-5 text-gold" fill="currentColor" />
             Flashcards
           </Link>
 
-          <div className="flex gap-4">
+          <div className="flex gap-1">
             {NAV.map((item) => (
-              <Link key={item.href} href={item.href} className="opacity-70 hover:opacity-100">
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-full px-3 py-1.5 font-semibold opacity-70 transition hover:bg-brand-light hover:text-brand-dark hover:opacity-100 dark:hover:bg-brand/10 dark:hover:text-brand"
+              >
                 {item.label}
               </Link>
             ))}

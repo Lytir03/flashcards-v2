@@ -1,7 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  /* Gamified accent palette — kept separate from the neutral --background/
+     --foreground pair below, which stays the plain light/dark page tone. */
+  --color-brand: #3ac569; /* primary actions, correct, active nav, progress fill */
+  --color-brand-dark: #2e9e54; /* 3D-button shadow shade, hover */
+  --color-brand-light: #e3fbea; /* tinted badges/backgrounds */
+  --color-accent: #3b9eff; /* secondary actions, "hard" rating, info */
+  --color-accent-dark: #2f80cc;
+  --color-gold: #ffb800; /* streak flame, "easy" rating, highlights */
+  --color-gold-dark: #cc9300;
+  --color-danger: #ff5a5f; /* wrong answer, "again" rating, destructive */
+  --color-danger-dark: #db4348;
 }
 
 :root {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireOnboardedUser } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 import { ReviewSession, type ReviewCard } from "./review-session";
 
 export const dynamic = "force-dynamic";
@@ -56,9 +57,9 @@ export default async function ReviewPage({
   return (
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
-        <h1 className="text-lg font-medium">
+        <h1 className="text-xl font-extrabold">
           {deck.name}
-          {practice && <span className="ml-2 text-sm opacity-50">practice</span>}
+          {practice && <span className="ml-2 text-sm font-medium opacity-50">practice</span>}
         </h1>
         <Link
           href={`/decks/${deck.id}`}
@@ -76,11 +77,8 @@ export default async function ReviewPage({
               : "Nothing due in this deck today."}
           </p>
           {!practice && (
-            <Link
-              href={`/decks/${deck.id}/review?mode=practice`}
-              className="inline-block rounded-md border border-black/20 px-4 py-2 text-sm dark:border-white/20"
-            >
-              Practice anyway
+            <Link href={`/decks/${deck.id}/review?mode=practice`} className="inline-block">
+              <Button variant="ghost">Practice anyway</Button>
             </Link>
           )}
         </div>

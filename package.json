@@ -13,15 +13,16 @@
     "db:reset": "supabase db reset"
   },
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "katex": "^0.18.3",
+    "lucide-react": "^1.31.0",
     "next": "^16.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1",
     "unpdf": "^1.8.0",
-    "@napi-rs/canvas": "^0.1.80",
     "zod": "^4.4.3"
   },
   "devDependencies": {
