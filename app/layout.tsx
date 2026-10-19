@@ -1,16 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
 import "./globals.css";
 
-const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-nunito",
-});
-
 export const metadata: Metadata = {
-  title: "Flashcards",
-  description: "Turn lecture material into flashcards, review them, compete.",
+  title: {
+    default: "Flashcards — Learn a little every day",
+    template: "%s · Flashcards",
+  },
+  description: "Turn lecture material into smart flashcards, build a review streak, and challenge your friends.",
 };
 
 export const viewport: Viewport = {
@@ -23,7 +19,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={nunito.variable}>
+    <html lang="en">
       <body className="min-h-screen antialiased">{children}</body>
     </html>
   );

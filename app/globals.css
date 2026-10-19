@@ -1,39 +1,94 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Gamified accent palette — kept separate from the neutral --background/
-     --foreground pair below, which stays the plain light/dark page tone. */
-  --color-brand: #3ac569; /* primary actions, correct, active nav, progress fill */
-  --color-brand-dark: #2e9e54; /* 3D-button shadow shade, hover */
-  --color-brand-light: #e3fbea; /* tinted badges/backgrounds */
-  --color-accent: #3b9eff; /* secondary actions, "hard" rating, info */
-  --color-accent-dark: #2f80cc;
-  --color-gold: #ffb800; /* streak flame, "easy" rating, highlights */
-  --color-gold-dark: #cc9300;
-  --color-danger: #ff5a5f; /* wrong answer, "again" rating, destructive */
-  --color-danger-dark: #db4348;
+  --color-brand: #58cc02;
+  --color-brand-dark: #46a302;
+  --color-brand-light: #e9fbd8;
+  --color-accent: #1cb0f6;
+  --color-accent-dark: #168cc5;
+  --color-gold: #ffb800;
+  --color-gold-dark: #d89000;
+  --color-danger: #ff4b4b;
+  --color-danger-dark: #d83b3b;
+  --color-purple: #ce82ff;
+  --color-purple-dark: #a568cc;
 }
 
 :root {
-  /* A flat white page made every white Card blend into the background —
-     nothing floated. A soft neutral behind white cards is what actually
-     produces the "elevated card" look the shadow/border alone couldn't. */
-  --background: #f5f6fb;
-  --foreground: #0f172a;
+  --background: #f7f8f3;
+  --foreground: #243047;
+  --muted: #6b7280;
+  --surface: #ffffff;
+  --line: #e3e7dc;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b1120;
-    --foreground: #e2e8f0;
+    --background: #171a20;
+    --foreground: #f4f4ef;
+    --muted: #a1a59d;
+    --surface: #23272f;
+    --line: #363c45;
+    color-scheme: dark;
   }
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  min-width: 320px;
+  background-image:
+    radial-gradient(circle at 7% 6%, rgb(88 204 2 / 0.08), transparent 27rem),
+    radial-gradient(circle at 94% 12%, rgb(255 184 0 / 0.06), transparent 25rem),
+    radial-gradient(circle at 72% 92%, rgb(28 176 246 / 0.045), transparent 30rem);
+  background-attachment: fixed;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgb(28 176 246 / 0.32);
+}
+
+::selection {
+  background: rgb(88 204 2 / 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

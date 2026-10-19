@@ -3,12 +3,12 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 export type ButtonVariant = "primary" | "secondary" | "gold" | "danger" | "ghost";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: "bg-brand border-b-brand-dark text-white hover:bg-brand-dark",
-  secondary: "bg-accent border-b-accent-dark text-white hover:bg-accent-dark",
-  gold: "bg-gold border-b-gold-dark text-white hover:bg-gold-dark",
-  danger: "bg-danger border-b-danger-dark text-white hover:bg-danger-dark",
+  primary: "bg-brand border-b-brand-dark text-white hover:brightness-[1.04]",
+  secondary: "bg-accent border-b-accent-dark text-white hover:brightness-[1.04]",
+  gold: "bg-gold border-b-gold-dark text-white hover:brightness-[1.04]",
+  danger: "bg-danger border-b-danger-dark text-white hover:brightness-[1.04]",
   ghost:
-    "bg-transparent border border-black/15 text-current hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5",
+    "bg-white border-2 border-b-4 border-slate-200 text-slate-600 hover:bg-slate-50 dark:bg-white/5 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-white/10",
 };
 
 /** Ghost stays flat/outlined on purpose — the 3D press is for the chunky, filled variants. */
@@ -33,16 +33,18 @@ export function Button({
   fullWidth?: boolean;
   children: ReactNode;
 } & ButtonHTMLAttributes<HTMLButtonElement>) {
-  const sizeClasses = size === "lg" ? "px-6 py-3 text-base" : "px-4 py-2 text-sm";
+  const sizeClasses = size === "lg" ? "px-7 py-3.5 text-base" : "px-5 py-2.5 text-sm";
 
   return (
     <button
       {...props}
       className={[
-        "rounded-xl font-bold transition-transform disabled:opacity-50 disabled:pointer-events-none",
+        "inline-flex items-center justify-center gap-2 rounded-2xl font-extrabold uppercase tracking-wide transition-[transform,filter,background-color] disabled:pointer-events-none disabled:opacity-50",
         sizeClasses,
         VARIANT_CLASSES[variant],
-        PRESSABLE[variant] ? "border-b-4 active:translate-y-0.5 active:border-b-2" : "",
+        PRESSABLE[variant]
+          ? "border-b-4 hover:-translate-y-0.5 active:translate-y-0.5 active:border-b-2"
+          : "hover:-translate-y-0.5 active:translate-y-0.5 active:border-b-2",
         fullWidth ? "w-full" : "",
         className,
       ]

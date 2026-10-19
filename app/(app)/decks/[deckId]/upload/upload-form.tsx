@@ -106,7 +106,7 @@ export function UploadForm({ deckId }: { deckId: string }) {
   const busy = phase !== "idle";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div>
         <Label htmlFor="file">Lecture file</Label>
         <input
@@ -115,9 +115,9 @@ export function UploadForm({ deckId }: { deckId: string }) {
           type="file"
           accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown"
           disabled={busy}
-          className="mt-1 block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-brand file:px-3 file:py-2 file:text-sm file:font-bold file:text-white"
+          className="mt-2 block w-full rounded-2xl border-2 border-dashed border-accent/40 bg-accent/5 p-4 text-sm font-semibold file:mr-3 file:rounded-xl file:border-0 file:bg-accent file:px-4 file:py-2.5 file:text-sm file:font-extrabold file:text-white"
         />
-        <p className="mt-2 text-xs opacity-60">
+        <p className="mt-3 text-xs font-semibold text-slate-400">
           PDF, .txt or .md, up to 25 MB. Slides exported to PDF work well;
           scans of paper do not — there is no OCR yet.
         </p>

@@ -37,7 +37,7 @@ export function NewChallengeForm({ decks, bots }: { decks: Deck[]; bots: Bot[] }
 
   if (decks.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-black/15 p-8 text-center text-sm opacity-60 dark:border-white/15">
+      <p className="rounded-2xl border-2 border-dashed border-purple/40 bg-purple/5 p-8 text-center text-sm font-semibold text-slate-500 dark:text-slate-400">
         No public deck has enough approved cards yet. Make a deck public and
         approve at least 7 cards to challenge someone on it.
       </p>
@@ -52,7 +52,7 @@ export function NewChallengeForm({ decks, bots }: { decks: Deck[]; bots: Bot[] }
           id="deck_id"
           value={deckId}
           onChange={(event) => setDeckId(event.target.value)}
-          className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
+          className="mt-1.5 w-full rounded-2xl border-2 border-b-4 border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-slate-700 dark:bg-slate-800"
         >
           {decks.map((deck) => (
             <option key={deck.id} value={deck.id}>

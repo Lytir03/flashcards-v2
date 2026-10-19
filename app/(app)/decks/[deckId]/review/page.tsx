@@ -56,14 +56,14 @@ export default async function ReviewPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-baseline justify-between">
-        <h1 className="text-xl font-extrabold">
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-black tracking-tight">
           {deck.name}
           {practice && <span className="ml-2 text-sm font-medium opacity-50">practice</span>}
         </h1>
         <Link
           href={`/decks/${deck.id}`}
-          className="text-sm opacity-60 hover:opacity-100"
+          className="rounded-xl border-2 border-slate-200 px-3 py-1.5 text-sm font-extrabold text-slate-500 transition hover:bg-white dark:border-slate-700 dark:hover:bg-white/5"
         >
           Leave
         </Link>

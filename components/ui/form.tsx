@@ -10,16 +10,16 @@ export function Label({
   children: React.ReactNode;
 }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm font-bold opacity-80">
+    <label htmlFor={htmlFor} className="block text-sm font-extrabold text-slate-600 dark:text-slate-300">
       {children}
     </label>
   );
 }
 
 const FIELD_CLASSES =
-  "mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm " +
-  "outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20 " +
-  "dark:border-white/15 dark:focus:border-brand";
+  "mt-1.5 w-full rounded-2xl border-2 border-b-4 border-slate-200 bg-white px-4 py-3 text-sm font-semibold " +
+  "outline-none transition placeholder:text-slate-400 focus:border-accent focus:ring-4 focus:ring-accent/10 " +
+  "dark:border-[#363c45] dark:bg-[#23272f] dark:focus:border-accent";
 
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
@@ -50,20 +50,26 @@ export function Textarea(
 export function SubmitButton({
   children,
   variant = "primary",
+  fullWidth = false,
 }: {
   children: React.ReactNode;
   variant?: "primary" | "danger";
+  fullWidth?: boolean;
 }) {
   const { pending } = useFormStatus();
   const base =
-    "rounded-xl border-b-4 px-4 py-2 text-sm font-bold transition-transform disabled:opacity-50 disabled:pointer-events-none active:translate-y-0.5 active:border-b-2";
+    "rounded-2xl border-b-4 px-5 py-3 text-sm font-extrabold uppercase tracking-wide transition-transform disabled:pointer-events-none disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0.5 active:border-b-2";
   const styles =
     variant === "danger"
       ? "bg-danger border-b-danger-dark text-white hover:bg-danger-dark"
       : "bg-brand border-b-brand-dark text-white hover:bg-brand-dark";
 
   return (
-    <button type="submit" disabled={pending} className={`${base} ${styles}`}>
+    <button
+      type="submit"
+      disabled={pending}
+      className={`${base} ${styles} ${fullWidth ? "w-full" : ""}`}
+    >
       {pending ? "…" : children}
     </button>
   );

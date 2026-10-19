@@ -18,11 +18,12 @@ export default async function DecksPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Decks</h1>
-          <p className="mt-1 text-sm opacity-60">One deck per subject.</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-purple-dark dark:text-purple">Your library</p>
+          <h1 className="mt-1 text-4xl font-black tracking-tight">Decks</h1>
+          <p className="mt-2 text-sm font-semibold text-slate-500 dark:text-slate-400">One colourful home for every subject.</p>
         </div>
         <NewDeckForm />
       </div>
@@ -30,25 +31,25 @@ export default async function DecksPage() {
       {error && <p className="text-sm font-semibold text-danger">{error.message}</p>}
 
       {decks && decks.length > 0 ? (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {decks.map((deck) => {
             const colors = DECK_COLOR_CLASSES[deck.color as DeckColor] ?? DECK_COLOR_CLASSES.slate;
             return (
               <Link key={deck.id} href={`/decks/${deck.id}`}>
-                <Card interactive className="flex items-start gap-4">
+                <Card interactive className="flex min-h-36 flex-col items-start gap-5">
                   <span
-                    className={`flex size-11 shrink-0 items-center justify-center rounded-full ${colors.light} ${colors.text} font-extrabold`}
+                    className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${colors.light} ${colors.text} text-xl font-black`}
                   >
                     {deck.name.charAt(0).toUpperCase()}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-bold">{deck.name}</span>
+                  <span className="min-w-0 w-full flex-1">
+                    <span className="block truncate text-lg font-black">{deck.name}</span>
                     {deck.description && (
                       <span className="mt-0.5 block truncate text-sm opacity-60">
                         {deck.description}
                       </span>
                     )}
-                    <span className="mt-1 flex items-center gap-2 text-xs opacity-50">
+                    <span className="mt-3 flex items-center gap-2 text-xs font-bold text-slate-400">
                       {deck.card_count} cards
                       {deck.visibility === "public" && (
                         <span className="rounded-full bg-brand-light px-2 py-0.5 font-semibold text-brand-dark dark:bg-brand/10 dark:text-brand">

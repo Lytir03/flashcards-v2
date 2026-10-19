@@ -151,13 +151,15 @@ export function ReviewSession({
         </div>
       </div>
 
-      <Card className="min-h-48 p-8">
-        <Math className="block text-lg">{card.question}</Math>
+      <Card className="min-h-64 p-6 sm:p-9">
+        <p className="mb-5 text-xs font-black uppercase tracking-[0.16em] text-accent">Question</p>
+        <Math className="block text-xl font-bold leading-relaxed">{card.question}</Math>
 
         {revealed && (
           <>
-            <hr className="my-4 border-black/10 dark:border-white/10" />
-            <Math className="block opacity-90">{card.answer}</Math>
+            <hr className="my-6 border-t-2" />
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-brand-dark dark:text-brand">Answer</p>
+            <Math className="block text-lg leading-relaxed opacity-90">{card.answer}</Math>
 
             {card.source_id && card.source_page_number && (
               <div className="mt-4">
@@ -184,7 +186,7 @@ export function ReviewSession({
       </Card>
 
       {revealed ? (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {RATINGS.map((rating, index) => {
             const Icon = ICONS[rating];
             return (
@@ -193,7 +195,7 @@ export function ReviewSession({
                 variant={VARIANTS[rating]}
                 onClick={() => answer(rating)}
                 disabled={busy}
-                className="flex flex-col items-center gap-0.5"
+                className="min-h-20 flex-col items-center gap-0.5"
               >
                 <Icon className="size-4" />
                 {LABELS[rating]}

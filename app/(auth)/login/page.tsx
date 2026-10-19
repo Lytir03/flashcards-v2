@@ -7,16 +7,17 @@ export default function LoginPage() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-extrabold">Sign in</h1>
-        <p className="mt-1 text-sm opacity-60">Welcome back.</p>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand">Welcome back</p>
+        <h1 className="mt-2 text-3xl font-black tracking-tight">Ready to keep learning?</h1>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Sign in and pick up where you left off.</p>
       </div>
 
       <CredentialsForm action={signIn} submitLabel="Sign in" />
       <GoogleButton />
 
-      <p className="text-sm opacity-70">
+      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
         No account?{" "}
-        <Link href="/signup" className="underline">
+        <Link href="/signup" className="font-extrabold text-accent-dark hover:underline dark:text-accent">
           Create one
         </Link>
       </p>

@@ -1,21 +1,62 @@
+# Dependencies and build output
 node_modules/
 .next/
 out/
 build/
-.DS_Store
-
-# env
-.env
-.env.local
-.env*.local
-
-# supabase local stack
-supabase/.branches
-supabase/.temp
-supabase/.env
-
-# misc
+dist/
+coverage/
 *.tsbuildinfo
 next-env.d.ts
-.vercel
-coverage/
+.vercel/
+.turbo/
+
+# Environment variables and private keys (keep the setup template)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Supabase local stack and scratch queries
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+supabase/snippets/
+
+# Local coding-agent instructions, settings, and session state
+AGENTS.md
+AGENTS.*.md
+CLAUDE.md
+CLAUDE.*.md
+GEMINI.md
+GEMINI.*.md
+SKILL.md
+.agents/
+.agent/
+.claude/
+.codex/
+.cursor/
+.cursorrules
+.windsurf/
+.windsurfrules
+.clinerules
+.roo/
+.roorules
+.aider*
+.github/copilot-instructions.md
+.github/instructions/
+.github/prompts/
+.github/agents/
+
+# Logs, caches, editor files, and OS metadata
+*.log
+.cache/
+.eslintcache
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+._*
+Thumbs.db

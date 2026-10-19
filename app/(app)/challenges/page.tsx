@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Swords } from "lucide-react";
+import { ArrowRight, Plus, Swords, Trophy } from "lucide-react";
 import { requireOnboardedUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,11 +28,15 @@ function ChallengeRow({
   return (
     <Link href={href}>
       <Card interactive className="flex items-center justify-between gap-4">
-        <span>
+        <span className="text-sm font-semibold">
           {headline}
           {deckName && <span className="opacity-70"> on {deckName}</span>}
         </span>
-        {cta && <span className="shrink-0 text-sm font-bold text-brand-dark dark:text-brand">{cta}</span>}
+        {cta && (
+          <span className="flex shrink-0 items-center gap-1 text-sm font-extrabold text-accent-dark dark:text-accent">
+            {cta} <ArrowRight className="size-4" />
+          </span>
+        )}
       </Card>
     </Link>
   );
@@ -61,20 +65,29 @@ export default async function ChallengesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Challenges</h1>
-          <p className="mt-1 text-sm opacity-60">Quiz duels on a shared deck.</p>
+      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#8b5cf6] to-purple p-6 text-white shadow-[0_8px_0_#a568cc] sm:p-8">
+        <div className="absolute -right-8 -top-14 size-44 rounded-full bg-white/10" />
+        <div className="relative flex flex-wrap items-center justify-between gap-5">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">Friendly competition</p>
+            <h1 className="mt-2 text-4xl font-black tracking-tight">Challenges</h1>
+            <p className="mt-2 text-sm font-semibold text-white/80">Turn a shared deck into a quick-fire quiz duel.</p>
+          </div>
+          <span className="hidden size-20 place-items-center rounded-3xl bg-white/15 sm:grid">
+            <Trophy className="size-11" strokeWidth={2.5} />
+          </span>
         </div>
-        <Link href="/challenges/new">
-          <Button>New challenge</Button>
+        <Link href="/challenges/new" className="relative mt-6 inline-block">
+          <Button>
+            <Plus className="size-4" strokeWidth={3} /> New challenge
+          </Button>
         </Link>
       </div>
 
       {invitesToMe.length > 0 && (
         <section>
-          <h2 className="text-sm font-bold opacity-70">Invites</h2>
-          <div className="mt-2 space-y-2">
+          <h2 className="text-sm font-black uppercase tracking-[0.14em] text-danger">Invites</h2>
+          <div className="mt-3 space-y-3">
             {invitesToMe.map((c) => (
               <ChallengeRow
                 key={c.id}
@@ -97,8 +110,8 @@ export default async function ChallengesPage() {
 
       {active.length > 0 && (
         <section>
-          <h2 className="text-sm font-bold opacity-70">Active</h2>
-          <div className="mt-2 space-y-2">
+          <h2 className="text-sm font-black uppercase tracking-[0.14em] text-brand-dark dark:text-brand">Active</h2>
+          <div className="mt-3 space-y-3">
             {active.map((c) => {
               const opponent = c.challenger_id === user.id ? c.opponent : c.challenger;
               return (
@@ -124,8 +137,8 @@ export default async function ChallengesPage() {
 
       {waitingOnOthers.length > 0 && (
         <section>
-          <h2 className="text-sm font-bold opacity-70">Waiting on others</h2>
-          <div className="mt-2 space-y-2">
+          <h2 className="text-sm font-black uppercase tracking-[0.14em] text-gold-dark dark:text-gold">Waiting on others</h2>
+          <div className="mt-3 space-y-3">
             {waitingOnOthers.map((c) => (
               <Card key={c.id} className="flex items-center justify-between gap-4">
                 <span>
@@ -143,8 +156,8 @@ export default async function ChallengesPage() {
 
       {recent.length > 0 && (
         <section>
-          <h2 className="text-sm font-bold opacity-70">Recent</h2>
-          <div className="mt-2 space-y-2">
+          <h2 className="text-sm font-black uppercase tracking-[0.14em] text-slate-400">Recent</h2>
+          <div className="mt-3 space-y-3">
             {recent.map((c) => {
               const opponent = c.challenger_id === user.id ? c.opponent : c.challenger;
               return (
@@ -169,9 +182,11 @@ export default async function ChallengesPage() {
       )}
 
       {rows.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
-          <Swords className="mx-auto size-10 text-brand" strokeWidth={1.5} />
-          <p className="mt-3 text-sm opacity-70">
+        <div className="rounded-[2rem] border-2 border-dashed border-purple/50 bg-purple/5 p-10 text-center">
+          <span className="mx-auto grid size-16 place-items-center rounded-2xl bg-purple text-white shadow-[0_5px_0_#a568cc]">
+            <Swords className="size-9" strokeWidth={2.5} />
+          </span>
+          <p className="mt-5 text-sm font-semibold text-slate-500 dark:text-slate-400">
             No challenges yet. Start one from a public deck.
           </p>
         </div>

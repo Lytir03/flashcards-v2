@@ -49,7 +49,7 @@ export function OnboardingForm({
       </div>
 
       <FormError message={state?.error} />
-      <SubmitButton>Continue</SubmitButton>
+      <SubmitButton fullWidth>Continue</SubmitButton>
     </form>
   );
 }

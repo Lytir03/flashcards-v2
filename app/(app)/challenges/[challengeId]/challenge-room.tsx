@@ -127,8 +127,9 @@ export function ChallengeRoom({
         </div>
       </div>
 
-      <Card className="min-h-32 p-6">
-        <MathText className="block text-lg">{question.question}</MathText>
+      <Card className="min-h-40 p-6 sm:p-8">
+        <p className="mb-4 text-xs font-black uppercase tracking-[0.16em] text-purple-dark dark:text-purple">Choose the best answer</p>
+        <MathText className="block text-xl font-bold leading-relaxed">{question.question}</MathText>
       </Card>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -142,13 +143,13 @@ export function ChallengeRoom({
               onClick={() => choose(index)}
               disabled={answered}
               className={
-                "rounded-xl border px-3 py-3 text-left text-sm font-medium disabled:cursor-default " +
+                "rounded-2xl border-2 border-b-4 px-4 py-4 text-left text-sm font-bold transition disabled:cursor-default " +
                 (isCorrectChoice
-                  ? "border-brand bg-brand-light dark:bg-brand/10"
+                  ? "border-brand bg-brand-light text-brand-dark dark:bg-brand/10 dark:text-brand"
                   : isMyWrongPick
-                    ? "border-danger bg-danger/10"
-                    : "border-black/15 dark:border-white/15") +
-                (!answered ? " hover:bg-black/5 dark:hover:bg-white/5" : " opacity-70")
+                    ? "border-danger bg-danger/10 text-danger"
+                    : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800") +
+                (!answered ? " hover:-translate-y-0.5 hover:border-accent/50" : " opacity-70")
               }
             >
               <MathText>{choice}</MathText>

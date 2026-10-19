@@ -28,7 +28,7 @@ export function SettingsForm({
   const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
-    <form action={formAction} className="max-w-sm space-y-5">
+    <form action={formAction} className="space-y-5">
       <div>
         <Label htmlFor="display_name">Name</Label>
         <Input id="display_name" name="display_name" defaultValue={displayName} required />
@@ -43,7 +43,7 @@ export function SettingsForm({
         />
       </div>
 
-      <fieldset className="space-y-3 border-t border-black/10 pt-5 dark:border-white/10">
+      <fieldset className="space-y-4 border-t-2 pt-6">
         <legend className="sr-only">Reminders</legend>
 
         <label className="flex items-center gap-2 text-sm">
@@ -62,7 +62,7 @@ export function SettingsForm({
             id="reminder_hour"
             name="reminder_hour"
             defaultValue={reminderHour}
-            className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
+            className="mt-1.5 w-full rounded-2xl border-2 border-b-4 border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-slate-700 dark:bg-slate-800"
           >
             {HOURS.map((hour) => (
               <option key={hour} value={hour}>

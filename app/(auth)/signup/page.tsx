@@ -7,9 +7,10 @@ export default function SignupPage() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-extrabold">Create an account</h1>
-        <p className="mt-1 text-sm opacity-60">
-          Upload your lecture notes, get flashcards back.
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand">Start your streak</p>
+        <h1 className="mt-2 text-3xl font-black tracking-tight">Make studying feel lighter.</h1>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          Upload your lecture notes and turn them into cards you will remember.
         </p>
       </div>
 
@@ -20,9 +21,9 @@ export default function SignupPage() {
       />
       <GoogleButton />
 
-      <p className="text-sm opacity-70">
+      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
         Already registered?{" "}
-        <Link href="/login" className="underline">
+        <Link href="/login" className="font-extrabold text-accent-dark hover:underline dark:text-accent">
           Sign in
         </Link>
       </p>

@@ -25,18 +25,21 @@ export default async function NewChallengePage() {
     .order("bot_skill_level");
 
   return (
-    <div className="max-w-sm space-y-6">
+    <div className="max-w-xl space-y-7">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">New challenge</h1>
-        <p className="mt-1 text-sm opacity-60">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-purple-dark dark:text-purple">Pick your rival</p>
+        <h1 className="mt-1 text-4xl font-black tracking-tight">New challenge</h1>
+        <p className="mt-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
           A {QUESTION_COUNT}-question quiz on a shared deck.
         </p>
       </div>
 
-      <NewChallengeForm
-        decks={decks ?? []}
-        bots={(bots ?? []).filter((b): b is typeof b & { username: string } => b.username !== null)}
-      />
+      <div className="rounded-[2rem] border-2 border-b-4 border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800 sm:p-8">
+        <NewChallengeForm
+          decks={decks ?? []}
+          bots={(bots ?? []).filter((b): b is typeof b & { username: string } => b.username !== null)}
+        />
+      </div>
     </div>
   );
 }

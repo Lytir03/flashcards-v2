@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import { Plus, X } from "lucide-react";
 import {
   FormError,
   Input,
@@ -36,15 +37,34 @@ export function NewDeckForm() {
   }
 
   if (!open) {
-    return <Button onClick={() => setOpen(true)}>New deck</Button>;
+    return (
+      <Button onClick={() => setOpen(true)}>
+        <Plus className="size-4" strokeWidth={3} /> New deck
+      </Button>
+    );
   }
 
   return (
-    <form
-      ref={formRef}
-      action={handleSubmit}
-      className="w-full max-w-sm space-y-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
-    >
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-4 backdrop-blur-sm">
+      <form
+        ref={formRef}
+        action={handleSubmit}
+        className="w-full max-w-md space-y-5 rounded-[2rem] border-2 border-b-4 border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800 sm:p-8"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-brand">New collection</p>
+            <h2 className="mt-1 text-2xl font-black">Create a deck</h2>
+          </div>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close"
+            className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
       <div>
         <Label htmlFor="name">Name</Label>
         <Input id="name" name="name" placeholder="Anatomy I" required />
@@ -61,7 +81,7 @@ export function NewDeckForm() {
           id="color"
           name="color"
           defaultValue="slate"
-          className="mt-1 w-full rounded-xl border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/15"
+        className="mt-1.5 w-full rounded-2xl border-2 border-b-4 border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-slate-700 dark:bg-slate-800"
         >
           {DECK_COLORS.map((c) => (
             <option key={c} value={c}>
@@ -79,6 +99,7 @@ export function NewDeckForm() {
           Cancel
         </Button>
       </div>
-    </form>
+      </form>
+    </div>
   );
 }

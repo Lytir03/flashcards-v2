@@ -51,7 +51,7 @@ export function CredentialsForm({
       </div>
 
       <FormError message={state?.error} />
-      <SubmitButton>{submitLabel}</SubmitButton>
+      <SubmitButton fullWidth>{submitLabel}</SubmitButton>
     </form>
   );
 }
